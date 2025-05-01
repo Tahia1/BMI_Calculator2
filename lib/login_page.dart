@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'listview_page.dart';
 import 'gridview_page.dart';
+import 'bmi_calculator_page.dart'; // Import BMI Calculator Page
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,17 +14,21 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // Method to check if email and password are filled
+  // Only check login fields for BMI Calculator
   bool _isLoginInputValid() {
     return emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
   }
 
-  void _handleNavigation(Widget page) {
+  void _goToPage(Widget page) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  void _goToBmiCalculator() {
     if (_isLoginInputValid()) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      _goToPage(const BMICalculatorPage());
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter email and password first.')),
+        const SnackBar(content: Text('Please enter email and password to continue to BMI Calculator.')),
       );
     }
   }
@@ -61,13 +66,18 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () => _handleNavigation(const ListviewPage()),
+                onPressed: () => _goToPage(const ListviewPage()),
                 child: const Text('Go to List View'),
               ),
               const SizedBox(height: 15),
               ElevatedButton(
-                onPressed: () => _handleNavigation(const GridviewPage()),
+                onPressed: () => _goToPage(const GridviewPage()),
                 child: const Text('Go to Grid View'),
+              ),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: _goToBmiCalculator,
+                child: const Text('Go to BMI Calculator'),
               ),
             ],
           ),
